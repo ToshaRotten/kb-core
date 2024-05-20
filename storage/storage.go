@@ -4,14 +4,16 @@ import (
 	"database/sql"
 	"fmt"
 	"main/config"
+
+	_ "github.com/lib/pq"
 )
 
 type Storage struct {
-	db *sql.DB
+	DB *sql.DB
 }
 
-func New(config *config.Storage) (*Storage, error) {
-	const op = "storage.New"
+func New(config config.Storage) (*Storage, error) {
+	const op = "storage.postgres.New"
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
@@ -22,29 +24,5 @@ func New(config *config.Storage) (*Storage, error) {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
 
-	return &Storage{db: db}, nil
+	return &Storage{DB: db}, nil
 }
-
-func GetLesson() {}
-
-func AddLesson() {}
-
-func DeleteLesson() {}
-
-func UpdateLesson() {}
-
-func GetGroup() {}
-
-func AddGroup() {}
-
-func DeleteGroup() {}
-
-func UpdateGroup() {}
-
-func GetProfessor() {}
-
-func AddProfessor() {}
-
-func DeleteProfessor() {}
-
-func UpdateProfessor() {}
