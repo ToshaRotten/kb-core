@@ -1,4 +1,4 @@
-package handlers
+package get
 
 import (
 	"main/models/database"
@@ -8,18 +8,17 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetUserByID(c fiber.Ctx, db *gorm.DB) error {
+func GetGroupByID(c fiber.Ctx, db *gorm.DB) error {
 	id := c.Params("id", "0")
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
 		return fiber.ErrBadRequest
 	}
 
-	user := database.User{
+	group := database.Group{
 		ID: uint(idInt),
 	}
 
-	db.Take(&user)
-
-	return c.JSON(user)
+	db.Take(group)
+	return c.JSON(group)
 }

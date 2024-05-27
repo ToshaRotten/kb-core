@@ -4,7 +4,7 @@ import (
 	"log"
 	"log/slog"
 	"main/config"
-	"main/handlers"
+	"main/handlers/group/create"
 	"main/models/database"
 
 	"github.com/gofiber/fiber/v3"
@@ -16,26 +16,13 @@ import (
 func main() {
 	cfg := config.MustLoadConfig("configs/local.env")
 	app := fiber.New()
-
 	app.Use(cors.New())
-	//
-	// storage, err := storage.New(cfg.Storage)
-	// if err != nil {
-	// 	slog.Error(err.Error())
-	// }
 
 	connectionString := "postgresql://" + cfg.Storage.Username + ":" + cfg.Storage.Password + "@" + cfg.Storage.Host + ":" + cfg.Storage.Port + "/" + cfg.Storage.Database
 	db, err := gorm.Open(postgres.Open(connectionString))
 	if err != nil {
 		slog.Error(err.Error())
 	}
-
-	// gormDB, err := gorm.Open(postgres.New(postgres.Config{
-	// 	Conn: storage.DB,
-	// }), &gorm.Config{})
-	// if err != nil {
-	// 	slog.Error(err.Error())
-	// }
 
 	err = db.AutoMigrate(
 		&database.Professor{},
@@ -49,10 +36,13 @@ func main() {
 	}
 
 	app.Use(func(c fiber.Ctx) error {
-		slog.Info(string(c.Request().RequestURI()))
+		slog.Info(" " + string(c.Method()) + string(c.Request().RequestURI()))
 		return c.Next()
 	})
 
-	app.Get("/user/:id", handlers.GetUserByID(fiber.Ctx{}, db))
+	app.Post("/group/", func(c fiber.Ctx) error {
+		return create.CreateGroup(c, db)
+	})
+
 	log.Fatal(app.Listen(cfg.HTTPServer.Host + ":" + cfg.HTTPServer.Port))
 }

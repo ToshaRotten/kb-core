@@ -1,7 +1,7 @@
 package database
 
 type Lesson struct {
-	ID        uint      `gorm:"primaryKey"`
-	Professor Professor `gorm:"embedded"`
-	Group     Group     `gorm:"embedded"`
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	Professor Professor `gorm:"embedded"   json:"professor"`
+	Group     Group     `gorm:"embedded"   json:"group"`
 }

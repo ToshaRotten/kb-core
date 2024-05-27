@@ -1,8 +1,8 @@
 package database
 
 type Group struct {
-	ID        uint `gorm:"primaryKey"`
-	Code      string
-	Professor Professor `gorm:"embedded"`
-	Price     uint
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	Code      string    `                  json:"code"`
+	Professor Professor `gorm:"embedded"   json:"professor"`
+	Price     uint      `                  json:"price"`
 }
