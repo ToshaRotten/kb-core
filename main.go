@@ -5,6 +5,8 @@ import (
 	"log/slog"
 	"main/config"
 	"main/handlers/group/create"
+	"main/handlers/group/remove"
+	"main/handlers/group/update"
 	"main/models/database"
 
 	"github.com/gofiber/fiber/v3"
@@ -25,9 +27,7 @@ func main() {
 	}
 
 	err = db.AutoMigrate(
-		&database.Professor{},
 		&database.User{},
-		&database.Student{},
 		&database.Group{},
 		&database.Lesson{},
 	)
@@ -36,12 +36,27 @@ func main() {
 	}
 
 	app.Use(func(c fiber.Ctx) error {
-		slog.Info(" " + string(c.Method()) + string(c.Request().RequestURI()))
+		slog.Info(
+			" " + string(
+				c.Method(),
+			) + string(
+				c.Request().RequestURI(),
+			) + " " + c.Request().
+				String(),
+		)
 		return c.Next()
 	})
 
 	app.Post("/group/", func(c fiber.Ctx) error {
 		return create.CreateGroup(c, db)
+	})
+
+	app.Delete("/group/", func(c fiber.Ctx) error {
+		return remove.RemoveGroup(c, db)
+	})
+
+	app.Put("/group/", func(c fiber.Ctx) error {
+		return update.UpdateGroup(c, db)
 	})
 
 	log.Fatal(app.Listen(cfg.HTTPServer.Host + ":" + cfg.HTTPServer.Port))
