@@ -4,9 +4,9 @@ import (
 	"log"
 	"log/slog"
 	"main/config"
-	"main/handlers/group/create"
-	"main/handlers/group/remove"
-	"main/handlers/group/update"
+	"main/handlers/group"
+	"main/handlers/lesson"
+	"main/handlers/user"
 	"main/models/database"
 
 	"github.com/gofiber/fiber/v3"
@@ -47,16 +47,67 @@ func main() {
 		return c.Next()
 	})
 
+	// Group
 	app.Post("/group/", func(c fiber.Ctx) error {
-		return create.CreateGroup(c, db)
+		return group.CreateGroup(c, db)
 	})
 
 	app.Delete("/group/", func(c fiber.Ctx) error {
-		return remove.RemoveGroup(c, db)
+		return group.RemoveGroup(c, db)
 	})
 
 	app.Put("/group/", func(c fiber.Ctx) error {
-		return update.UpdateGroup(c, db)
+		return group.UpdateGroup(c, db)
+	})
+
+	app.Get("/group/", func(c fiber.Ctx) error {
+		return group.GetGroups(c, db)
+	})
+
+	app.Get("/group/:id", func(c fiber.Ctx) error {
+		return group.GetGroupByID(c, db)
+	})
+
+	// Lesson
+	app.Get("/lesson/", func(c fiber.Ctx) error {
+		return lesson.GetLessons(c, db)
+	})
+
+	app.Post("/lesson/", func(c fiber.Ctx) error {
+		return lesson.CreateLesson(c, db)
+	})
+
+	app.Delete("/lesson/", func(c fiber.Ctx) error {
+		return lesson.RemoveLesson(c, db)
+	})
+
+	app.Put("/lesson/", func(c fiber.Ctx) error {
+		return lesson.UpdateLesson(c, db)
+	})
+
+	app.Get("/lesson/:id", func(c fiber.Ctx) error {
+		return lesson.GetLessonByID(c, db)
+	})
+
+	// User
+	app.Get("/user/", func(c fiber.Ctx) error {
+		return user.GetUser(c, db)
+	})
+
+	app.Post("/user/", func(c fiber.Ctx) error {
+		return user.CreateUser(c, db)
+	})
+
+	app.Delete("/user/", func(c fiber.Ctx) error {
+		return user.RemoveUser(c, db)
+	})
+
+	app.Put("/user/", func(c fiber.Ctx) error {
+		return user.UpdateUser(c, db)
+	})
+
+	app.Get("/user/:id", func(c fiber.Ctx) error {
+		return user.GetUserByID(c, db)
 	})
 
 	log.Fatal(app.Listen(cfg.HTTPServer.Host + ":" + cfg.HTTPServer.Port))
