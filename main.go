@@ -8,6 +8,7 @@ import (
 	"main/handlers/lesson"
 	"main/handlers/user"
 	"main/models/database"
+	"main/models/response"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
@@ -16,6 +17,7 @@ import (
 )
 
 func main() {
+	slog.Info("starting app ...")
 	cfg := config.MustLoadConfig("configs/local.env")
 	app := fiber.New()
 	app.Use(cors.New())
@@ -26,6 +28,7 @@ func main() {
 		slog.Error(err.Error())
 	}
 
+	slog.Info("auto migrate ...")
 	err = db.AutoMigrate(
 		&database.User{},
 		&database.Group{},
@@ -110,5 +113,10 @@ func main() {
 		return user.GetUserByID(c, db)
 	})
 
+	app.Get("/health/", func(c fiber.Ctx) error {
+		return c.JSON(response.OK)
+	})
+
+	slog.Info("starting server ...")
 	log.Fatal(app.Listen(cfg.HTTPServer.Host + ":" + cfg.HTTPServer.Port))
 }
