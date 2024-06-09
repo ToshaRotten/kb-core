@@ -1,7 +1,6 @@
 package lesson
 
 import (
-	"encoding/json"
 	"main/models/database"
 	"main/models/response"
 	"strconv"
@@ -20,10 +19,6 @@ type getLessonResponse struct {
 }
 
 func GetLessons(c fiber.Ctx, db *gorm.DB) error {
-	var request getLessonRequest
-	if err := json.Unmarshal(c.Body(), &request); err != nil {
-		return c.JSON(getLessonResponse{nil, response.Error()})
-	}
 	var items []database.Lesson
 
 	err := db.Model(&database.User{}).Find(&items).Error
