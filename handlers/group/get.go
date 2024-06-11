@@ -1,7 +1,6 @@
 package group
 
 import (
-	"encoding/json"
 	"main/models/database"
 	"main/models/response"
 	"strconv"
@@ -10,20 +9,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type getGroupRequest struct {
-	database.Group `json:"group"`
-}
-
 type getGroupResponse struct {
 	Items []database.Group `json:"items"`
 	response.Response
 }
 
 func GetGroups(c fiber.Ctx, db *gorm.DB) error {
-	var request getGroupRequest
-	if err := json.Unmarshal(c.Body(), &request); err != nil {
-		return c.JSON(getGroupResponse{nil, response.Error()})
-	}
 	var items []database.Group
 
 	err := db.Model(&database.Group{}).Find(&items).Error

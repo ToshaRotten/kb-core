@@ -10,7 +10,7 @@ import (
 )
 
 type removeUserRequest struct {
-	Lesson database.Lesson `json:"lesson"`
+	User database.User `json:"user"`
 }
 
 type removeUserResponse struct {
@@ -22,7 +22,7 @@ func RemoveUser(c fiber.Ctx, db *gorm.DB) error {
 	if err := json.Unmarshal(c.Body(), &request); err != nil {
 		return c.JSON(removeUserResponse{response.Error()})
 	}
-	db.Delete(&request.Lesson)
+	db.Delete(&request.User)
 
 	return c.JSON(removeUserResponse{response.OK()})
 }

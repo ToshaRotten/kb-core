@@ -10,7 +10,7 @@ import (
 )
 
 type updateUserRequest struct {
-	Lesson database.Lesson `json:"lesson"`
+	User database.User `json:"user"`
 }
 
 type updateUserResponse struct {
@@ -22,7 +22,7 @@ func UpdateUser(c fiber.Ctx, db *gorm.DB) error {
 	if err := json.Unmarshal(c.Body(), &request); err != nil {
 		return c.JSON(updateUserResponse{response.Error()})
 	}
-	db.Save(&request.Lesson)
+	db.Save(&request.User)
 
 	return c.JSON(updateUserResponse{response.OK()})
 }

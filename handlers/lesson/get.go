@@ -9,10 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type getLessonRequest struct {
-	database.Lesson `json:"lesson"`
-}
-
 type getLessonResponse struct {
 	Items []database.Lesson `json:"items"`
 	response.Response
@@ -21,7 +17,7 @@ type getLessonResponse struct {
 func GetLessons(c fiber.Ctx, db *gorm.DB) error {
 	var items []database.Lesson
 
-	err := db.Model(&database.User{}).Find(&items).Error
+	err := db.Model(&database.Lesson{}).Find(&items).Error
 	if err != nil {
 		return c.JSON(getLessonResponse{nil, response.Error()})
 	}

@@ -10,7 +10,7 @@ import (
 )
 
 type createLessonRequest struct {
-	database.Lesson `json:"lesson"`
+	Lesson database.Lesson `json:"lesson"`
 }
 
 type createLessonResponse struct {
@@ -22,7 +22,7 @@ func CreateLesson(c fiber.Ctx, db *gorm.DB) error {
 	if err := json.Unmarshal(c.Body(), &request); err != nil {
 		return c.JSON(createLessonResponse{response.Error()})
 	}
-	db.Create(&request.Group)
+	db.Create(&request.Lesson)
 
 	return c.JSON(createLessonResponse{response.OK()})
 }

@@ -10,7 +10,7 @@ import (
 )
 
 type removeGroupRequest struct {
-	database.Group `json:"group"`
+	Group database.Group `json:"group"`
 }
 
 type removeGroupResponse struct {
