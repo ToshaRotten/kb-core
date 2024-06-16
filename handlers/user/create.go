@@ -2,11 +2,12 @@ package user
 
 import (
 	"encoding/json"
-	"main/models/database"
-	"main/models/response"
 
 	"github.com/gofiber/fiber/v3"
 	"gorm.io/gorm"
+
+	"main/models/database"
+	"main/models/response"
 )
 
 type createUserRequest struct {
@@ -19,7 +20,7 @@ type createUserResponse struct {
 
 func CreateUser(c fiber.Ctx, db *gorm.DB) error {
 	var request createUserRequest
-	if err := json.Unmarshal(c.Body(), &request); err != nil {
+	if err := json.Unmarshal(c.Body(), &request.User); err != nil {
 		return c.JSON(createUserResponse{response.Error()})
 	}
 	db.Create(&request.User)

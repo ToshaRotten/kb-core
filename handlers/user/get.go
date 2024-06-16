@@ -1,12 +1,11 @@
 package user
 
 import (
-	"main/models/database"
-	"main/models/response"
-	"strconv"
-
 	"github.com/gofiber/fiber/v3"
 	"gorm.io/gorm"
+
+	"main/models/database"
+	"main/models/response"
 )
 
 type getUserResponse struct {
@@ -23,19 +22,4 @@ func GetUser(c fiber.Ctx, db *gorm.DB) error {
 	}
 
 	return c.JSON(getUserResponse{items, response.OK()})
-}
-
-func GetUserByID(c fiber.Ctx, db *gorm.DB) error {
-	id := c.Params("id", "0")
-	idInt, err := strconv.Atoi(id)
-	if err != nil {
-		return fiber.ErrBadRequest
-	}
-
-	user := database.User{
-		ID: uint(idInt),
-	}
-
-	db.Take(user)
-	return c.JSON(getUserResponse{[]database.User{user}, response.OK()})
 }
